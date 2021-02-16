@@ -18,112 +18,151 @@ class BinaryTree {
 	/** minDepth(): return the minimum depth of the tree -- that is,
 	 * the length of the shortest path from the root to a leaf. */
 
-	minDepth(root = this.root, depth = 1) {
-		if (!root) return 0;
-		let children = [];
-		let toVisitQueue = [root];
-		let current = toVisitQueue.shift();
+	minDepth() {
+		if (!this.root) return 0;
 
-		if (!current.left && !current.right) return depth;
-		current.left ? children.push(current.left) : null;
-		current.right ? children.push(current.right) : null;
-
-		for (let child of children) {
-			return this.minDepth(child, depth + 1);
+		function minDepthHelper(node) {
+			if (node.left === null && node.right === null) return 1;
+			if (node.left === null) return minDepthHelper(node.right) + 1;
+			if (node.right === null) return minDepthHelper(node.left) + 1;
+			return (
+				Math.min(minDepthHelper(node.left), minDepthHelper(node.right)) + 1
+			);
 		}
 
-		return depth;
+		return minDepthHelper(this.root);
+
+		// if (!current.left && !current.right) return depth;
+		// let children = [current.left, current.right];
+		// for (let child of children) {
+		// 	return this.minDepth(child, depth + 1);
+		// }
 	}
 
 	/** maxDepth(): return the maximum depth of the tree -- that is,
 	 * the length of the longest path from the root to a leaf. */
 
-	maxDepth(root = this.root, depth = 1, maxDepth = 1) {
-		if (!root) return 0;
-		let children = [];
-		let toVisitQueue = [root];
-		let current = toVisitQueue.shift();
+	maxDepth() {
+		if (!this.root) return 0;
 
-		if (!current.left && !current.right) return depth;
-		current.left ? children.push(current.left) : null;
-		current.right ? children.push(current.right) : null;
-		if (depth > maxDepth) maxDepth = depth;
-
-		for (let child of children) {
-			let totalDepth = this.maxDepth(child, depth + 1, maxDepth);
-			if (totalDepth > maxDepth) {
-				maxDepth = totalDepth;
-			}
+		function maxDepthHelper(node) {
+			if (node.left === null && node.right === null) return 1;
+			if (node.left === null) return maxDepthHelper(node.right) + 1;
+			if (node.right === null) return maxDepthHelper(node.left) + 1;
+			return (
+				Math.max(maxDepthHelper(node.left), maxDepthHelper(node.right)) + 1
+			);
 		}
 
-		return maxDepth;
+		return maxDepthHelper(this.root);
+
+		// if (!current.left && !current.right) return depth;
+		// let children = [current.left, current.right];
+		// if (depth > maxDepth) maxDepth = depth;
+		// for (let child of children) {
+		// 	let totalDepth = this.maxDepth(child, depth + 1, maxDepth);
+		// 	if (totalDepth > maxDepth) {
+		// 		maxDepth = totalDepth;
+		// 	}
+		// }
 	}
 
 	/** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
 	 * The path doesn't need to start at the root, but you can't visit a node more than once. */
 
-	maxSum(root = this.root, sum = 0, maxSum = 0, peak = null) {
-		if (!root) return 0;
-		let children = [];
-		if (!peak) {
-			peak = findMaxPeak(root);
-			root = peak.node;
-			sum = peak.sum;
-			maxSum = sum;
-		}
-		let toVisitStack = [root];
+	maxSum() {
+		let result = 0;
 
-		let current = toVisitStack.pop();
-		current.left ? children.push(current.left) : null;
-		current.right ? children.push(current.right) : null;
-		if (current === peak.node) {
-			for (let child of children) {
-				let totalSum = this.maxSum(child, sum, maxSum, peak);
-				if (totalSum > maxSum) {
-					maxSum = totalSum;
-				}
-			}
-		} else {
-			if (current !== peak.left && current !== peak.right) {
-				if (!current.left && !current.right) return sum + current.val;
-				sum += current.val;
-				if (sum > maxSum) maxSum = sum;
-			}
-			for (let child of children) {
-				toVisitStack.push(child);
-				let totalSum = this.maxSum(child, sum, maxSum, peak);
-
-				if (totalSum > maxSum) {
-					maxSum = totalSum;
-				}
-			}
+		function maxSumHelper(node) {
+			if (node === null) return 0;
+			const leftSum = maxSumHelper(node.left);
+			const rightSum = maxSumHelper(node.right);
+			result = Math.max(result, node.val + leftSum + rightSum);
+			return Math.max(0, leftSum + node.val, rightSum + node.val);
 		}
 
-		return maxSum;
+		maxSumHelper(this.root);
+		return result;
+		// let children = [];
+		// if (!peak) {
+		// 	peak = findMaxPeak(root);
+		// 	root = peak.node;
+		// 	sum = peak.sum;
+		// 	maxSum = sum;
+		// }
+		// let toVisitStack = [root];
+
+		// let current = toVisitStack.pop();
+		// current.left ? children.push(current.left) : null;
+		// current.right ? children.push(current.right) : null;
+		// if (current === peak.node) {
+		// 	for (let child of children) {
+		// 		let totalSum = this.maxSum(child, sum, maxSum, peak);
+		// 		if (totalSum > maxSum) {
+		// 			maxSum = totalSum;
+		// 		}
+		// 	}
+		// } else {
+		// 	if (current !== peak.left && current !== peak.right) {
+		// 		if (!current.left && !current.right) return sum + current.val;
+		// 		sum += current.val;
+		// 		if (sum > maxSum) maxSum = sum;
+		// 	}
+		// 	for (let child of children) {
+		// 		toVisitStack.push(child);
+		// 		let totalSum = this.maxSum(child, sum, maxSum, peak);
+
+		// 		if (totalSum > maxSum) {
+		// 			maxSum = totalSum;
+		// 		}
+		// 	}
+		// }
+
+		// return maxSum;
 	}
 
 	/** nextLarger(lowerBound): return the smallest value in the tree
 	 * which is larger than lowerBound. Return null if no such value exists. */
 
-	nextLarger(lowerBound, root = this.root, closestValue = null) {
-		if (!root) return null;
-		let toVisitStack = [root];
-		let children = [];
-		while (toVisitStack.length) {
-			let current = toVisitStack.pop();
-			current.left ? children.push(current.left) : null;
-			current.right ? children.push(current.right) : null;
+	nextLarger(lowerBound) {
+		if (!this.root) return null;
+
+		function nextLargerHelper(node, closestVal = null) {
+			let shouldUpdateClosestVal =
+				node.val > lowerBound && (node.val < closestVal || closestVal === null);
+			if (shouldUpdateClosestVal) closestVal = node.val;
+			if (node.left === null && node.right === null) return closestVal;
+			if (node.left === null) return nextLargerHelper(node.right, closestVal);
+			if (node.right === null) return nextLargerHelper(node.left, closestVal);
 			if (
-				current.val > lowerBound &&
-				(current.val < closestValue || closestValue === null)
-			) {
-				closestValue = current.val;
-			}
-			for (let child of children) {
-				closestValue = this.nextLarger(lowerBound, child, closestValue);
-			}
+				nextLargerHelper(node.left, closestVal) === null &&
+				nextLargerHelper(node.right, closestVal) === null
+			)
+				return null;
+			return Math.min(
+				nextLargerHelper(node.left, closestVal),
+				nextLargerHelper(node.right, closestVal)
+			);
 		}
-		return closestValue;
+
+		return nextLargerHelper(this.root);
+		// let toVisitStack = [root];
+		// let children = [];
+		// while (toVisitStack.length) {
+		// 	let current = toVisitStack.pop();
+		// 	current.left ? children.push(current.left) : null;
+		// 	current.right ? children.push(current.right) : null;
+		// 	if (
+		// 		current.val > lowerBound &&
+		// 		(current.val < closestValue || closestValue === null)
+		// 	) {
+		// 		closestValue = current.val;
+		// 	}
+		// 	for (let child of children) {
+		// 		closestValue = this.nextLarger(lowerBound, child, closestValue);
+		// 	}
+		// }
+		// return closestValue;
 	}
 
 	/** Further study!
