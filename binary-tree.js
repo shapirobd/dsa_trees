@@ -152,26 +152,26 @@ class BinaryTree {
 	 * deserialize(stringTree): deserialize stringTree into a BinaryTree object. */
 
 	static deserialize(stringTree) {
+		// create array from values in string
 		let arr = stringTree.split(",");
-		const root = new BinaryTreeNode(+arr.shift());
-		debugger;
 
-		function deserializeHelper(node) {
+		function buildTree(node) {
 			if (node) {
+				// determine what node.left should be - if it shouldn't be null, make it a new BinaryTreeNode
+				// with the value of arr.shift() and run buildTree() on this new BinaryTreeNode
 				let left = arr.shift();
-				left === "#"
-					? (node.left = null)
-					: (node.left = new BinaryTreeNode(+left));
-				deserializeHelper(node.left);
+				if (left !== "#") node.left = new BinaryTreeNode(+left);
+				buildTree(node.left);
+				// determine what node.right should be - if it shouldn't be null, make it a new BinaryTreeNode
+				// with the value of arr.shift() and run buildTree() on this new BinaryTreeNode
 				let right = arr.shift();
-				right === "#"
-					? (node.right = null)
-					: (node.right = new BinaryTreeNode(+right));
-				deserializeHelper(node.right);
+				if (right !== "#") node.right = new BinaryTreeNode(+right);
+				buildTree(node.right);
 			}
 		}
 
-		deserializeHelper(root);
+		const root = new BinaryTreeNode(+arr.shift());
+		buildTree(root);
 		return new BinaryTree(root);
 	}
 
