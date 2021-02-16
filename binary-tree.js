@@ -31,12 +31,6 @@ class BinaryTree {
 		}
 
 		return minDepthHelper(this.root);
-
-		// if (!current.left && !current.right) return depth;
-		// let children = [current.left, current.right];
-		// for (let child of children) {
-		// 	return this.minDepth(child, depth + 1);
-		// }
 	}
 
 	/** maxDepth(): return the maximum depth of the tree -- that is,
@@ -55,16 +49,6 @@ class BinaryTree {
 		}
 
 		return maxDepthHelper(this.root);
-
-		// if (!current.left && !current.right) return depth;
-		// let children = [current.left, current.right];
-		// if (depth > maxDepth) maxDepth = depth;
-		// for (let child of children) {
-		// 	let totalDepth = this.maxDepth(child, depth + 1, maxDepth);
-		// 	if (totalDepth > maxDepth) {
-		// 		maxDepth = totalDepth;
-		// 	}
-		// }
 	}
 
 	/** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
@@ -83,42 +67,6 @@ class BinaryTree {
 
 		maxSumHelper(this.root);
 		return result;
-		// let children = [];
-		// if (!peak) {
-		// 	peak = findMaxPeak(root);
-		// 	root = peak.node;
-		// 	sum = peak.sum;
-		// 	maxSum = sum;
-		// }
-		// let toVisitStack = [root];
-
-		// let current = toVisitStack.pop();
-		// current.left ? children.push(current.left) : null;
-		// current.right ? children.push(current.right) : null;
-		// if (current === peak.node) {
-		// 	for (let child of children) {
-		// 		let totalSum = this.maxSum(child, sum, maxSum, peak);
-		// 		if (totalSum > maxSum) {
-		// 			maxSum = totalSum;
-		// 		}
-		// 	}
-		// } else {
-		// 	if (current !== peak.left && current !== peak.right) {
-		// 		if (!current.left && !current.right) return sum + current.val;
-		// 		sum += current.val;
-		// 		if (sum > maxSum) maxSum = sum;
-		// 	}
-		// 	for (let child of children) {
-		// 		toVisitStack.push(child);
-		// 		let totalSum = this.maxSum(child, sum, maxSum, peak);
-
-		// 		if (totalSum > maxSum) {
-		// 			maxSum = totalSum;
-		// 		}
-		// 	}
-		// }
-
-		// return maxSum;
 	}
 
 	/** nextLarger(lowerBound): return the smallest value in the tree
@@ -146,30 +94,39 @@ class BinaryTree {
 		}
 
 		return nextLargerHelper(this.root);
-		// let toVisitStack = [root];
-		// let children = [];
-		// while (toVisitStack.length) {
-		// 	let current = toVisitStack.pop();
-		// 	current.left ? children.push(current.left) : null;
-		// 	current.right ? children.push(current.right) : null;
-		// 	if (
-		// 		current.val > lowerBound &&
-		// 		(current.val < closestValue || closestValue === null)
-		// 	) {
-		// 		closestValue = current.val;
-		// 	}
-		// 	for (let child of children) {
-		// 		closestValue = this.nextLarger(lowerBound, child, closestValue);
-		// 	}
-		// }
-		// return closestValue;
 	}
 
 	/** Further study!
 	 * areCousins(node1, node2): determine whether two nodes are cousins
 	 * (i.e. are at the same level but have different parents. ) */
 
-	areCousins(node1, node2) {}
+	areCousins(node1, node2) {
+		if (this.root === node1 || this.root === node2) return false;
+
+		function areCousinsHelper(node, level = 1, currParent = null) {
+			if (node === node1 || node === node2) return [level, currParent];
+			if (!node || (!node.left && !node.right)) return null;
+
+			let leftMatch = areCousinsHelper(node.left, level + 1, node);
+			let rightMatch = areCousinsHelper(node.right, level + 1, node);
+
+			if (level === 1) return { leftMatch, rightMatch };
+			if (leftMatch && rightMatch) {
+				let sameParent = leftMatch[1] === rightMatch[1];
+				let differentNode = leftMatch[0] !== rightMatch[0];
+				if (sameParent || differentNode) return false;
+				return true;
+			}
+			return leftMatch || rightMatch || false;
+		}
+
+		const { leftMatch, rightMatch } = areCousinsHelper(this.root);
+		let sameParent = leftMatch[1] === rightMatch[1];
+		let differentNode = leftMatch[0] !== rightMatch[0];
+		if ((!leftMatch && !rightMatch) || sameParent || differentNode)
+			return false;
+		return true;
+	}
 
 	/** Further study!
 	 * serialize(tree): serialize the BinaryTree object tree into a string. */
