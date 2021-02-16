@@ -172,7 +172,6 @@ class BinaryTree {
 		}
 
 		deserializeHelper(root);
-		console.log(new BinaryTree(root));
 		return new BinaryTree(root);
 	}
 
