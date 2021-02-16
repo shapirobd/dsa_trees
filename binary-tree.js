@@ -131,12 +131,50 @@ class BinaryTree {
 	/** Further study!
 	 * serialize(tree): serialize the BinaryTree object tree into a string. */
 
-	static serialize() {}
+	static serialize(tree) {
+		const values = [];
+
+		function traverse(node) {
+			if (node) {
+				values.push(node.val);
+				traverse(node.left);
+				traverse(node.right);
+			} else {
+				values.push("#");
+			}
+			return `${values}`;
+		}
+
+		return traverse(tree.root);
+	}
 
 	/** Further study!
 	 * deserialize(stringTree): deserialize stringTree into a BinaryTree object. */
 
-	static deserialize() {}
+	static deserialize(stringTree) {
+		let arr = stringTree.split(",");
+		const root = new BinaryTreeNode(+arr.shift());
+		debugger;
+
+		function deserializeHelper(node) {
+			if (node) {
+				let left = arr.shift();
+				left === "#"
+					? (node.left = null)
+					: (node.left = new BinaryTreeNode(+left));
+				deserializeHelper(node.left);
+				let right = arr.shift();
+				right === "#"
+					? (node.right = null)
+					: (node.right = new BinaryTreeNode(+right));
+				deserializeHelper(node.right);
+			}
+		}
+
+		deserializeHelper(root);
+		console.log(new BinaryTree(root));
+		return new BinaryTree(root);
+	}
 
 	/** Further study!
 	 * lowestCommonAncestor(node1, node2): find the lowest common ancestor

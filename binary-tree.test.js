@@ -135,62 +135,63 @@ describe("areCousins", function () {
 	});
 });
 
-// describe("serialize and deserialize", function () {
-// 	let myTree;
+describe("serialize and deserialize", function () {
+	let myTree;
 
-// 	beforeEach(function () {
-// 		let root = new BinaryTreeNode(1);
-// 		root.left = new BinaryTreeNode(2);
-// 		root.right = new BinaryTreeNode(3);
-// 		root.right.left = new BinaryTreeNode(4);
-// 		root.right.right = new BinaryTreeNode(5);
+	beforeEach(function () {
+		let root = new BinaryTreeNode(1);
+		root.left = new BinaryTreeNode(2);
+		root.right = new BinaryTreeNode(3);
+		root.right.left = new BinaryTreeNode(4);
+		root.right.right = new BinaryTreeNode(5);
 
-// 		myTree = new BinaryTree(root);
-// 	});
+		myTree = new BinaryTree(root);
+	});
 
-// 	it("serializes trees into strings", function () {
-// 		// Failure message:
-// 		// The 'serialize' function needs to output a string.
+	it("serializes trees into strings", function () {
+		// Failure message:
+		// The 'serialize' function needs to output a string.
 
-// 		expect(typeof BinaryTree.serialize(myTree)).toBe("string");
-// 	});
+		expect(typeof BinaryTree.serialize(myTree)).toBe("string");
+		expect(BinaryTree.serialize(myTree)).toBe("1,2,#,#,3,4,#,#,5,#,#");
+	});
 
-// 	it("deserializes strings into BinaryTree objects", function () {
-// 		// Failure message:
-// 		// The 'deserialize' function needs to output a BinaryTreeNode
+	it("deserializes strings into BinaryTree objects", function () {
+		// Failure message:
+		// The 'deserialize' function needs to output a BinaryTreeNode
 
-// 		let serialized = BinaryTree.serialize(myTree);
-// 		let result = BinaryTree.deserialize(serialized);
-// 		expect(result instanceof BinaryTree).toBe(true);
-// 	});
+		let serialized = BinaryTree.serialize(myTree);
+		let result = BinaryTree.deserialize(serialized);
+		expect(result instanceof BinaryTree).toBe(true);
+	});
 
-// 	it("reverses one another", function () {
-// 		// Failure message:
-// 		// the function 'deserialize' should perfectly reverse the function 'serialize'
+	// it("reverses one another", function () {
+	// 	// Failure message:
+	// 	// the function 'deserialize' should perfectly reverse the function 'serialize'
 
-// 		let serialized = BinaryTree.serialize(myTree);
-// 		let result = BinaryTree.deserialize(serialized);
-// 		expect(result).toEqual(myTree);
-// 	});
+	// 	let serialized = BinaryTree.serialize(myTree);
+	// 	let result = BinaryTree.deserialize(serialized);
+	// 	expect(result).toEqual(myTree);
+	// });
 
-// 	it("is a pure function", function () {
-// 		// Failure message:
-// 		// original tree must be unchanged
+	// it("is a pure function", function () {
+	// 	// Failure message:
+	// 	// original tree must be unchanged
 
-// 		let root = new BinaryTreeNode(1);
-// 		root.left = new BinaryTreeNode(2);
-// 		root.right = new BinaryTreeNode(3);
-// 		root.right.left = new BinaryTreeNode(4);
-// 		root.right.right = new BinaryTreeNode(5);
+	// 	let root = new BinaryTreeNode(1);
+	// 	root.left = new BinaryTreeNode(2);
+	// 	root.right = new BinaryTreeNode(3);
+	// 	root.right.left = new BinaryTreeNode(4);
+	// 	root.right.right = new BinaryTreeNode(5);
 
-// 		myTreeCopy = new BinaryTree(root);
+	// 	myTreeCopy = new BinaryTree(root);
 
-// 		let serialized = BinaryTree.serialize(myTree);
-// 		BinaryTree.deserialize(serialized);
+	// 	let serialized = BinaryTree.serialize(myTree);
+	// 	BinaryTree.deserialize(serialized);
 
-// 		expect(myTree).toEqual(myTreeCopy);
-// 	});
-// });
+	// 	expect(myTree).toEqual(myTreeCopy);
+	// });
+});
 
 // describe("lowestCommonAncestor", function () {
 // 	it("returns the lowest common ancestor", function () {
